@@ -30,6 +30,7 @@ django-admin startproject onlinecode
 ```
 
 Skip if cloned
+
 5. To create app inside project 
 ```bash
 cd onlinecode
@@ -43,11 +44,14 @@ python manage.py runserver
 ```
 
 7. To host on vercel 
+
 Step 1: Go to /onlinecode/settings.py
         Update ALLOWED_HOSTS = ['.vercel.app']
+
 Step 2: Generate requirments.txt using command
 ```bash
 pip freeze > requirements.txt
 ```
+
 Step 3: Create vercel.json file in app folder or manage.py path
 
