@@ -55,3 +55,6 @@ pip freeze > requirements.txt
 
 Step 3: Create vercel.json file in app folder or manage.py path
 
+## SCREENSHOT
+
+<img src="screenshot/online_code_python.png">
