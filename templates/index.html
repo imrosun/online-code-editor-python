@@ -171,7 +171,17 @@
       <div id="lineNumbers" class="line-numbers"></div>
       <textarea type="text" class="form-control codearea" id="codearea" name="codearea" rows="15"
         onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
-        style="resize: none; font-family: monospace; padding-left: 45px; background: transparent; z-index: 1; position: relative;"></textarea>
+        style="resize: none; font-family: monospace; padding-left: 45px; background: transparent; z-index: 1; position: relative;">
+# Online Python - IDE, Editor, Compiler, Interpreter
+
+def sum(a, b):
+    return (a + b)
+
+a = int(input('Enter 1st number: '))
+b = int(input('Enter 2nd number: '))
+
+print(f'Sum of {a} and {b} is {sum(a, b)}')
+  </textarea>
       <div id="highlightLine" class="highlight-line"></div>
     </div>
   </div>
@@ -373,6 +383,41 @@
 
     updateLineNumbers();
     updateHighlightLine();
+
+    // INDENTATION
+    codearea.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab' && !e.shiftKey) {
+        // Tab: Indent
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = start + 4;
+      } else if (e.key === 'Tab' && e.shiftKey) {
+        // Shift+Tab: Un-indent
+        e.preventDefault();
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        const lineStart = this.value.lastIndexOf('\n', start - 1) + 1;
+        if (this.value.substring(lineStart, lineStart + 4) === '    ') {
+          this.value = this.value.substring(0, lineStart) + this.value.substring(lineStart + 4);
+          const newPos = start - 4 > lineStart ? start - 4 : lineStart;
+          this.selectionStart = this.selectionEnd = newPos;
+        }
+      } else if (e.key === 'Enter') {
+        // Auto-indent on Enter
+        const start = this.selectionStart;
+        const lineStart = this.value.lastIndexOf('\n', start - 1) + 1;
+        const line = this.value.substring(lineStart, start);
+        const indentMatch = line.match(/^\s*/);
+        let indent = indentMatch ? indentMatch[0] : '';
+        // If previous line ends with ":", add one indent level
+        if (line.trim().endsWith(':')) indent += '    ';
+        e.preventDefault();
+        this.value = this.value.substring(0, start) + '\n' + indent + this.value.substring(this.selectionEnd);
+        this.selectionStart = this.selectionEnd = start + 1 + indent.length;
+      }
+    });
 
     // RUN BUTTON
     const runBtn = document.getElementById('runBtn');
